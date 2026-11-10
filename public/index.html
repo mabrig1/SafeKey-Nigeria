@@ -10,6 +10,8 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/styles.css">
   <script defer src="/app.js"></script>
+  <script defer src="/compare-ui.js"></script>
+  <script defer src="/evidence.js"></script>
   <title>SafeKey Nigeria — Check Before You Pay</title>
 </head>
 <body>
@@ -18,7 +20,7 @@
   <div class="container nav">
     <a href="#home" class="brand" aria-label="SafeKey Nigeria home"><span class="brand-icon" aria-hidden="true">⌂</span><span>safe<span class="brand-bold">key</span><small>NIGERIA</small></span></a>
     <nav aria-label="Main navigation" class="navlinks">
-      <a href="#check">Check a property</a><a href="#how">How it works</a><a href="#report">Report a concern</a><a href="#professionals">Professionals</a>
+      <a href="#check">Check a property</a><a href="#compare">Compare listings</a><a href="#evidence">Evidence kit</a><a href="#report">Report a concern</a><a href="#professionals">Professionals</a>
     </nav>
     <a class="nav-cta" href="#check">Start a free check <span aria-hidden="true">↗</span></a>
   </div>
@@ -79,9 +81,81 @@
     <div id="checkResult" class="result-panel" tabindex="-1" aria-live="polite" hidden></div>
   </div>
 </section>
+<section id="compare" class="section compare-section">
+  <div class="container">
+    <div class="section-intro">
+      <span class="section-kicker">CROSS-LISTING RADAR</span>
+      <h2>Two advertisements. <em>Better questions.</em></h2>
+      <p>Compare two property offers found on WhatsApp, social media, or real-estate websites. Differences are questions to investigate, not proof of fraud.</p>
+    </div>
+    <form id="compareForm" class="panel compare-form">
+      <div class="compare-grid"><fieldset class="compare-side">
+<legend>Listing A</legend>
+<div class="field-row">
+ <div class="field"><label for="onearea">City / area</label><input id="onearea" maxlength="90" placeholder="e.g. Lekki, Lagos"></div>
+ <div class="field"><label for="oneplot">Plot / unit reference</label><input id="oneplot" maxlength="100" placeholder="e.g. Plot 12"></div>
+</div>
+<div class="field"><label for="oneaddress">Property address or estate</label><input id="oneaddress" maxlength="220" placeholder="Exact advertised location"></div>
+<div class="field"><label for="onelistingUrl">Listing URL</label><input id="onelistingUrl" type="url" maxlength="500" placeholder="https://property-site.example/listing"></div>
+<div class="field-row">
+ <div class="field"><label for="oneagentPhone">Agent phone</label><input id="oneagentPhone" inputmode="tel" maxlength="35" placeholder="0803 000 0000"></div>
+ <div class="field"><label for="onepriceNgn">Price (₦)</label><input id="onepriceNgn" inputmode="numeric" maxlength="32" placeholder="25000000"></div>
+</div>
+<div class="field-row">
+ <div class="field"><label for="oneadvertiserName">Advertiser name</label><input id="oneadvertiserName" maxlength="100" placeholder="As advertised"></div>
+ <div class="field"><label for="onepaymentName">Payment recipient</label><input id="onepaymentName" maxlength="100" placeholder="Account-holder name"></div>
+</div>
+</fieldset><fieldset class="compare-side">
+<legend>Listing B</legend>
+<div class="field-row">
+ <div class="field"><label for="twoarea">City / area</label><input id="twoarea" maxlength="90" placeholder="e.g. Lekki, Lagos"></div>
+ <div class="field"><label for="twoplot">Plot / unit reference</label><input id="twoplot" maxlength="100" placeholder="e.g. Plot 12"></div>
+</div>
+<div class="field"><label for="twoaddress">Property address or estate</label><input id="twoaddress" maxlength="220" placeholder="Exact advertised location"></div>
+<div class="field"><label for="twolistingUrl">Listing URL</label><input id="twolistingUrl" type="url" maxlength="500" placeholder="https://property-site.example/listing"></div>
+<div class="field-row">
+ <div class="field"><label for="twoagentPhone">Agent phone</label><input id="twoagentPhone" inputmode="tel" maxlength="35" placeholder="0803 000 0000"></div>
+ <div class="field"><label for="twopriceNgn">Price (₦)</label><input id="twopriceNgn" inputmode="numeric" maxlength="32" placeholder="25000000"></div>
+</div>
+<div class="field-row">
+ <div class="field"><label for="twoadvertiserName">Advertiser name</label><input id="twoadvertiserName" maxlength="100" placeholder="As advertised"></div>
+ <div class="field"><label for="twopaymentName">Payment recipient</label><input id="twopaymentName" maxlength="100" placeholder="Account-holder name"></div>
+</div>
+</fieldset></div>
+      <div class="compare-actions">
+        <p class="muted">The websites are not visited. Comparisons are not saved, and a text match does not confirm legal ownership.</p>
+        <button id="compareSubmit" class="btn primary" type="submit">Compare the two offers <span aria-hidden="true">↗</span></button>
+      </div>
+      <p id="compareError" class="form-message" role="alert" hidden></p>
+    </form>
+    <div id="compareResult" class="result-panel" tabindex="-1" aria-live="polite" hidden></div>
+  </div>
+</section>
 <section id="how" class="section how-section">
  <div class="container"><div class="section-intro"><span class="section-kicker">OUR APPROACH</span><h2>Good decisions begin<br>with <em>better questions.</em></h2><p>Risk screening is only the beginning. Here's how SafeKey helps you organize your next steps.</p></div>
  <div class="how-grid"><article class="how-card"><span class="how-num">01</span><div class="how-symbol">⌕</div><h3>Enter the clues</h3><p>Share a listing link, property reference, agent phone, or advertisement details. You control what you submit.</p></article><article class="how-card"><span class="how-num">02</span><div class="how-symbol">≋</div><h3>Examine the signals</h3><p>Simple, explainable rules highlight mismatched names, urgent payment requests and inconsistencies in previous submissions.</p></article><article class="how-card"><span class="how-num">03</span><div class="how-symbol">◇</div><h3>Understand the gaps</h3><p>Your report distinguishes allegations, user-supplied information and checks that have not yet been completed.</p></article><article class="how-card"><span class="how-num">04</span><div class="how-symbol">✓</div><h3>Verify before paying</h3><p>Use independent professionals and the appropriate official registers to confirm title, boundaries, authority and payment instructions.</p></article></div></div>
+</section>
+<section id="evidence" class="section evidence-section">
+  <div class="container evidence-layout">
+    <div>
+      <span class="section-kicker">PRIVATE EVIDENCE KIT</span>
+      <h2>Preserve what you received. <em>Without uploading it.</em></h2>
+      <p>Fingerprint a receipt, agreement, survey or screenshot in your browser using SHA-256. The resulting file fingerprint helps compare whether two copies have identical bytes. It cannot prove a document is genuine.</p>
+      <div class="aside-small">PRIVATE BY DESIGN
+        <p>The selected file never leaves your browser. No upload, account, or cloud storage is used. Nothing is saved unless you choose to download the manifest yourself.</p>
+      </div>
+    </div>
+    <div class="panel evidence-panel">
+      <div class="field"><label for="evidenceFile">Choose a file (max 15 MB)</label><input id="evidenceFile" type="file" aria-describedby="evidenceHelp"><span id="evidenceHelp" class="field-hint">PDF, image, receipt or other file. The file itself is never uploaded.</span></div>
+      <div class="field"><label for="evidenceSource">How was it obtained?</label><select id="evidenceSource"><option value="advertisement">Advertisement or listing</option><option value="agent_message">Agent message</option><option value="official_record">Official record provided to me (not authenticated)</option><option value="receipt">Receipt or payment instruction</option><option value="site_visit">Site-visit evidence</option><option value="other">Other source</option></select></div>
+      <div class="field"><label for="evidenceNote">Private note (optional)</label><textarea id="evidenceNote" maxlength="240" rows="2" placeholder="What this file is meant to show, or where it came from"></textarea></div>
+      <button id="evidenceAdd" type="button" class="btn primary">Fingerprint file locally <span aria-hidden="true">→</span></button>
+      <p id="evidenceNotice" class="form-message" role="status" hidden></p>
+      <div class="evidence-entries" id="evidenceList" aria-live="polite"></div>
+      <div class="evidence-actions"><button id="evidenceExport" class="btn outline" type="button" disabled>Download manifest (.json)</button><button id="evidenceClear" class="btn outline" type="button" disabled>Clear entries</button></div>
+      <p class="muted">A fingerprint establishes byte equality only. Filenames and notes may be sensitive; keep downloaded manifests private.</p>
+    </div>
+  </div>
 </section>
 <section id="report" class="section report-section">
  <div class="container report-grid">
@@ -118,6 +192,6 @@
  </div></details></div>
 </section>
 </main>
-<footer class="footer"><div class="container footer-top"><div><a href="#home" class="brand footer-brand"><span class="brand-icon">⌂</span><span>safe<span class="brand-bold">key</span><small>NIGERIA</small></span></a><p>Built to encourage better questions before property payments. Independent pilot; not affiliated with a land registry or government agency.</p></div><div><strong>Explore</strong><a href="#check">Free preliminary check</a><a href="#report">Report a concern</a><a href="#professionals">Professional directory</a></div><div><strong>Important</strong><a href="/privacy.html">Privacy & limitations</a><a href="#how">How it works</a><a href="#admin">Moderator workspace</a></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> SafeKey Nigeria · Pilot</span><span>Risk screening is not legal verification. Verify independently before paying.</span></div></footer>
+<footer class="footer"><div class="container footer-top"><div><a href="#home" class="brand footer-brand"><span class="brand-icon">⌂</span><span>safe<span class="brand-bold">key</span><small>NIGERIA</small></span></a><p>Built to encourage better questions before property payments. Independent pilot; not affiliated with a land registry or government agency.</p></div><div><strong>Explore</strong><a href="#check">Free preliminary check</a><a href="#compare">Compare two listings</a><a href="#evidence">Private evidence kit</a><a href="#report">Report a concern</a><a href="#professionals">Professional directory</a></div><div><strong>Important</strong><a href="/privacy.html">Privacy & limitations</a><a href="#how">How it works</a><a href="#admin">Moderator workspace</a></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> SafeKey Nigeria · Pilot</span><span>Risk screening is not legal verification. Verify independently before paying.</span></div></footer>
 </body>
 </html>
