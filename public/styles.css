@@ -6,3 +6,45 @@
 .privacy-content{max-width:780px}
 .privacy-title{font-size:clamp(32px,5vw,42px);color:var(--ink)}
 .privacy-subtitle{font-size:25px}
+
+/* Cross-listing comparison: compact, keyboard-friendly, mobile-responsive */
+.compare-section{background:#f0f8f4}
+.compare-form{padding:26px}
+.compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.compare-side{border:1px solid #d9e7e0;border-radius:13px;min-width:0;padding:20px 18px 8px;background:#fff}
+.compare-side legend{font-weight:850;letter-spacing:-.2px;color:var(--teal);padding:0 9px}
+.compare-side .field-row{gap:12px}
+.compare-side .field{min-width:0}
+.compare-actions{padding-top:18px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.compare-actions p{max-width:610px;margin:0}
+.comparison-findings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.comparison-findings .finding{margin:0}
+.comparison-findings .finding strong{font-size:13px}
+.evidence-section{background:#fff}
+.evidence-layout{display:grid;grid-template-columns:1fr 1.15fr;gap:55px;align-items:start}
+.evidence-layout>div>p{color:var(--gray);line-height:1.85}
+.evidence-panel{padding:28px}
+.evidence-panel input[type=file]{width:100%;padding:10px}
+.evidence-entries{margin-top:22px;display:grid;gap:12px}
+.evidence-entry{background:#f7faf8;border:1px solid #dce9e2;border-radius:10px;padding:15px;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.evidence-entry strong{overflow-wrap:anywhere}
+.evidence-entry p{margin:0}
+.evidence-entry button{min-height:35px;padding:7px 13px}
+.evidence-digest{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:10px;color:#267566;line-height:1.55;overflow-wrap:anywhere}
+.evidence-actions{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0}
+.evidence-actions .btn{flex:1}
+@media(max-width:1080px){
+  .compare-side .field-row{grid-template-columns:1fr}
+}
+@media(max-width:820px){
+  .compare-grid,.evidence-layout{grid-template-columns:1fr;gap:20px}
+  .compare-actions{flex-direction:column;align-items:stretch}
+}
+@media(max-width:560px){
+  .compare-form,.evidence-panel{padding:17px}
+  .comparison-findings{grid-template-columns:1fr}
+  .evidence-actions .btn{min-width:100%}
+}
+@media print{
+  .compare-section,.evidence-section{display:none!important}
+}
