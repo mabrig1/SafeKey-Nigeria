@@ -89,15 +89,24 @@ function renderAssessment(report) {
 }
 byId("year").textContent = String(new Date().getFullYear());
 api("/api/health").then(status => {
-  if (status.status === "stateless_preview") {
-    byId("previewNotice").hidden = false;
-    byId("reportSubmit").disabled = true;
-    byId("reportSubmit").textContent = "Reporting will open after verification setup";
-    notice(byId("reportMessage"), "Private incident reporting is not active in this preview. For urgent matters, contact appropriate authorities or independent legal assistance.");
+  if (status.status === "configured") {
+    // Even configured screening is not government title verification.
+    return;
+  }
+  byId("previewNotice").hidden = false;
+  byId("reportSubmit").disabled = true;
+  byId("reportSubmit").textContent = "Reporting unavailable during setup";
+  notice(byId("reportMessage"), "Private incident reporting is not active. For urgent concerns, seek appropriate independent or official assistance.");
+  if (status.status !== "stateless_preview") {
+    byId("previewNotice").textContent = "SafeKey setup incomplete: the database is not yet usable. Property screening and private reporting are temporarily unavailable. No verified property claims can be made.";
+    byId("checkSubmit").disabled = true;
+    byId("checkSubmit").textContent = "Screening unavailable during setup";
   }
 }).catch(() => {
   byId("previewNotice").hidden = false;
-  byId("previewNotice").textContent = "Connection status is unknown. Do not rely on any on-screen assessment until the server is available.";
+  byId("previewNotice").textContent = "Connection status is unknown. Screening is unavailable until the server can be checked.";
+  byId("checkSubmit").disabled = true;
+  byId("reportSubmit").disabled = true;
 });
 byId("checkForm").addEventListener("submit", async (event) => {
   event.preventDefault();

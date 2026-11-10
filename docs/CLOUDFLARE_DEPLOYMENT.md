@@ -44,7 +44,7 @@ The Wrangler `name` must match your actual Worker name in Cloudflare. This repos
 
 3. Create separate private secrets for `HASH_PEPPER` (minimum 32 characters) and `ADMIN_API_KEY` (minimum 32 characters) in **Worker Settings → Variables and Secrets**.
 4. Run `npx wrangler d1 migrations apply safekey-nigeria --remote` only after confirming the intended Cloudflare account and database, then update and deploy the version with D1 binding.
-5. Verify `GET /api/health` reports `configured` (never presume a database is ready because a build succeeded).
+5. Verify `GET /api/health` reports `configured` and `database: ready`. The health check now queries the D1 schema, rather than assuming the presence of a D1 binding means migrations were applied. If it reports `migrations_required`, apply the correct migrations; if `database_unavailable`, investigate D1 connectivity and permissions. For `stateless_preview`, no database and no case persistence are enabled.
 6. Keep `REPORTS_ENABLED=false`, `AI_EXPLANATION_ENABLED=false`, and `EMAIL_ALERTS_ENABLED=false` until data protection, moderator identity, consent, anti-abuse and provider setup are finished.
 7. Configure API keys through encrypted **Cloudflare secrets**, not Git or client-side code; see [OPENROUTER_RESEND_SETUP.md](OPENROUTER_RESEND_SETUP.md).
 
@@ -63,3 +63,19 @@ Do not use a fake UUID to suppress errors. A safe stateless app is preferable to
 Cloudflare references:
 - https://developers.cloudflare.com/workers/ci-cd/builds/troubleshoot/
 - https://developers.cloudflare.com/workers/wrangler/configuration/
+
+## Automated verification
+
+The CI workflow now runs `scripts/smoke.mjs` against a real **local** Wrangler Worker. It checks that static HTML/CSS/JavaScript and the privacy page load, that security headers are present, that the health endpoint reports stateless mode, that screening returns an unverified report, that invalid inputs fail, and that admin/report features remain closed without D1.
+
+This is stronger than a bundle-only dry-run, but **it is not proof that Cloudflare production is deployed**. It requires no Cloudflare account credentials, has no database, and never contacts OpenRouter or Resend.
+
+For live release validation, inspect the Cloudflare Deployments tab for the commit currently on `main`. After a successful deployment, open its actual **published** Worker hostname and check:
+
+- `GET /api/health` responds with the expected mode.
+- `/`, `/styles.css`, `/app.js`, and `/privacy.html` all load.
+- Run a fictional, non-personal property check and confirm the result is explicitly unverified.
+- Confirm that real property reports remain disabled until secure D1, access controls, and policies are configured.
+- Verify the first error in Cloudflare logs if the build fails; GitHub green checks do not prove Cloudflare deployment permissions.
+
+Do not publish a guessed workers.dev address; use the actual Workers & Pages URL shown in the account.

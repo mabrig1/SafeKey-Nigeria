@@ -73,14 +73,36 @@ function adminReady(env) { return ready(env) && !!env.ADMIN_API_KEY && env.ADMIN
 function validShort(v, max, min = 1) { return typeof v === "string" && v.trim().length >= min && v.trim().length <= max; }
 async function handleApi(request, env, ctx) {
   const url = new URL(request.url), method = request.method, path = url.pathname;
-  if (path === "/api/health" && method === "GET") return json({
-    service: "SafeKey Check",
-    status: ready(env) ? "configured" : "stateless_preview",
-    mode: ready(env) ? "pilot" : "no_storage",
-    registryConnection: false,
-    incidentReporting: ready(env) && env.REPORTS_ENABLED === "true",
-    aiAvailable: ready(env) && env.AI_EXPLANATION_ENABLED === "true"
-  });
+  if (path === "/api/health" && method === "GET") {
+    const bound = ready(env);
+    let status = bound ? "migrations_required" : "stateless_preview";
+    let database = bound ? "unverified" : "unconfigured";
+    if (bound) {
+      try {
+        // A D1 binding and HASH_PEPPER alone do not prove tables were migrated.
+        const found = await env.DB.prepare(
+          "SELECT name FROM sqlite_master WHERE type = 'table' AND name IN ('checks', 'reports', 'professionals', 'rate_buckets')"
+        ).all();
+        const tableNames = new Set((found?.results || []).map(row => row.name));
+        if (["checks", "reports", "professionals", "rate_buckets"].every(name => tableNames.has(name))) {
+          status = "configured";
+          database = "ready";
+        } else {
+          database = "migrations_required";
+        }
+      } catch {
+        status = "database_unavailable";
+        database = "unavailable";
+      }
+    }
+    return json({
+      service: "SafeKey Check", status,
+      mode: status === "stateless_preview" ? "no_storage" : "pilot",
+      database, registryConnection: false,
+      incidentReporting: status === "configured" && env.REPORTS_ENABLED === "true",
+      aiAvailable: status === "configured" && env.AI_EXPLANATION_ENABLED === "true"
+    });
+  }
   if (method !== "GET" && request.headers.get("origin") && request.headers.get("origin") !== url.origin)
     return failure("Cross-origin writes are not allowed.", 403);
 
