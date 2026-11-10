@@ -1,0 +1,5 @@
+# COPY to .dev.vars; never commit .dev.vars
+HASH_PEPPER=replace-with-a-long-random-secret-minimum-32-characters
+ADMIN_API_KEY=replace-with-an-independent-long-random-admin-secret
+# Optional: disable public reporting during your early private pilot
+REPORTS_ENABLED=true
