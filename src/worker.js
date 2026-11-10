@@ -1,5 +1,6 @@
 import { parseCheck, evaluate, normalizeIdentity } from "./risk.js";
 import { aiQuestions, alertModerator, emailReady } from "./integrations.js";
+import { compareListings } from "./comparison.js";
 
 const headers = {
   "content-type": "application/json; charset=utf-8",
@@ -105,6 +106,17 @@ async function handleApi(request, env, ctx) {
   }
   if (method !== "GET" && request.headers.get("origin") && request.headers.get("origin") !== url.origin)
     return failure("Cross-origin writes are not allowed.", 403);
+
+  // Buyer-submitted, zero-retention comparison. No external listing fetches,
+  // registry calls, model calls or database writes.
+  if (path === "/api/compare" && method === "POST") {
+    if (ready(env) && !(await rateLimit(env, request, "compare", 24)))
+      return failure("Comparison limit reached. Try again later.", 429);
+    const submitted = await readJson(request);
+    const comparison = compareListings(submitted);
+    if (comparison.error) return failure(comparison.error, 422);
+    return json(comparison);
+  }
 
   // A fresh Cloudflare Worker can launch safely without a database. Stateless
   // screening never stores submitted inputs or calls billable integrations.
