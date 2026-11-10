@@ -38,6 +38,17 @@ const report2=await second.json();
 assert.ok(report2.findings.some(item=>item.code==="property_contact_difference"));
 assert.equal(report2.level,"unverified");
 
+// Comparison remains zero-retention even with D1 configured.
+const compareResponse=await post("/api/compare",{
+  first:{area:"Lagos",address:"Fictional test estate",agentPhone:"08031234567",priceNgn:"15000000"},
+  second:{area:"Lagos",address:"Fictional test estate",agentPhone:"08061234567",priceNgn:"16000000"}
+});
+assert.equal(compareResponse.status,200);
+const comparison=await compareResponse.json();
+assert.equal(comparison.status,"comparison_only");
+assert.equal(comparison.retained,false);
+assert.ok(comparison.signals.some(s=>s.code==="price_difference"));
+
 const report=await post("/api/reports",{
   category:"misleading_listing",area:"Lagos (fictional)",description:"A fictional example was listed twice using two different fictional contact points.",evidenceKind:"none",consent:true
 });
