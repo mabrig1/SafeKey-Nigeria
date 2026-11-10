@@ -16,3 +16,12 @@ Do not put sensitive personal information or exploit details in a public issue. 
 
 ## Intentional limitations
 Automated checks are heuristic; no OCR, AI model inference, public fraudulent-person registry, live credential lookups, bank integration or escrow. Only hash-based correlations across previous inputs, which can be inaccurate. Report statuses are admin-internal.
+
+
+## Benchmark-driven comparison & local evidence kit
+
+- `POST /api/compare` only compares manually entered listing fields. The application does **not** fetch submitted URLs (avoids SSRF and scraping) or persist their content. D1-backed mode maintains separate, short-lived anonymous request-rate counters. Configure Cloudflare WAF, Turnstile and operator limits before public exposure, particularly when running statelessly without D1.
+- Duplicate textual references are not verified property identities. Different prices, phones or payees are **questions requiring evidence**, never assertions of criminal wrongdoing. Do not add public reputation penalties automatically.
+- The browser's evidence SHA-256 kit never uploads files or fingerprints. It is capped at 15 MB per file, 12 entries per browser session, and uses no localStorage or server database. Downloaded JSON files can contain sensitive filenames, source labels, and free-text notes: users must protect them.
+- A hash only establishes whether bytes match; it says nothing about whether a deed, receipt or image is authentic or issued by an authorized body.
+- No third-party GitHub code was copied in this benchmark upgrade. See `docs/GITHUB_BENCHMARK_2026-11-10.md`.
