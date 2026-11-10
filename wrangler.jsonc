@@ -1,12 +1,13 @@
 {
-  // Set the D1 database_id to your actual database ID before deploying.
+  // Replace the D1 database_id with the real Cloudflare D1 ID before deployment.
   "name": "safekey-nigeria",
   "main": "src/worker.js",
   "compatibility_date": "2025-12-01",
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    "run_worker_first": ["/api/*"]
+    // Route all responses through the Worker so the CSP and other headers apply.
+    "run_worker_first": true
   },
   "d1_databases": [
     {
