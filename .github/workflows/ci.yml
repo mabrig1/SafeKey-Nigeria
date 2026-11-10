@@ -1,0 +1,25 @@
+name: SafeKey CI
+on:
+  push:
+    branches: [main, "feat/**", "fix/**"]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Syntax validation
+        run: npm run check
+      - name: Unit and integration tests
+        run: npm test
+      - name: Install Wrangler for bundle validation
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Cloudflare bundling dry run (no deployment)
+        run: npx wrangler deploy --dry-run --outdir /tmp/safekey-bundle

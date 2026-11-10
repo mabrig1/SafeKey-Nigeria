@@ -1,0 +1,14 @@
+{
+  // Safe first deployment: no fake D1 database ID.
+  // This Worker serves static assets and stateless checks until D1 is provisioned.
+  "name": "safekey-nigeria",
+  "main": "src/worker.js",
+  "compatibility_date": "2025-12-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  }
+  // After creating the actual D1 database, add d1_databases as documented
+  // in docs/CLOUDFLARE_DEPLOYMENT.md and apply migrations.
+}

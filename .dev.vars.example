@@ -1,0 +1,15 @@
+# Save as .dev.vars locally. Never commit .dev.vars or share real keys in chat.
+HASH_PEPPER=replace-with-a-unique-random-secret-at-least-32-characters
+ADMIN_API_KEY=replace-with-a-different-random-admin-secret-at-least-32-characters
+REPORTS_ENABLED=false
+
+# OpenRouter (API key is usually sk-or-v1-...); ENABLED only after review.
+OPENROUTER_API_KEY=replace-with-your-openrouter-api-key
+OPENROUTER_MODEL=openai/gpt-4o-mini
+AI_EXPLANATION_ENABLED=false
+
+# Resend (API key is usually re_...); sender domain must be verified in Resend.
+RESEND_API_KEY=replace-with-your-resend-api-key
+RESEND_FROM_EMAIL=notifications@your-verified-domain.example
+ALERT_RECIPIENT_EMAIL=moderator@example.com
+EMAIL_ALERTS_ENABLED=false
