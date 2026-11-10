@@ -67,7 +67,24 @@ function renderAssessment(report) {
   const meta = element("p", "result-meta", "Reference: " + report.caseId + " · Issued: " + new Date(report.issuedAt).toLocaleString() + " · Input-based screening only");
   const print = element("button", "btn outline print-btn", "Print / save this report");
   print.type = "button"; print.addEventListener("click", () => window.print());
-  add(root, top, cols, foot, meta, print);
+  add(root, top, cols, foot);
+  if (report.aiAssist) {
+    const aiBox = element("section", "result-foot");
+    aiBox.appendChild(element("strong", "", "AI-assisted questions for independent verification"));
+    if (report.aiAssist.status === "available" && report.aiAssist.questions?.length) {
+      const list = element("ol");
+      for (const question of report.aiAssist.questions) list.appendChild(element("li", "", question));
+      aiBox.appendChild(list);
+      aiBox.appendChild(element("p", "muted", report.aiAssist.note));
+    } else {
+      aiBox.appendChild(element("p", "muted",
+        report.aiAssist.status === "disabled"
+          ? "AI assistance has not been enabled for this pilot."
+          : "AI assistance is unavailable; the rule-based screening report remains valid as a preliminary assessment."));
+    }
+    root.appendChild(aiBox);
+  }
+  add(root, meta, print);
   root.hidden = false; root.focus(); root.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 byId("year").textContent = String(new Date().getFullYear());
@@ -76,6 +93,7 @@ byId("checkForm").addEventListener("submit", async (event) => {
   notice(byId("checkError"), "");
   const button = byId("checkSubmit"); busy(button, true, "Assessing supplied information…");
   const values = Object.fromEntries(new FormData(event.currentTarget).entries());
+  values.aiExplain = byId("aiExplain").checked;
   try {
     const report = await api("/api/check", { method: "POST", body: JSON.stringify(values) });
     renderAssessment(report);
