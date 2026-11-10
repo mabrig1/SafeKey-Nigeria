@@ -24,6 +24,7 @@
   </div>
 </header>
 <main id="main">
+<div id="previewNotice" class="preview-notice" hidden role="status"><div class="container"><strong>Preliminary screening preview.</strong> No government registry checks, history comparison, report storage, or incident intake are enabled until SafeKey's secure database is configured.</div></div>
 <section class="hero" id="home">
   <div class="container hero-layout">
     <div class="hero-copy">
@@ -64,7 +65,7 @@
           <div class="field-row"><div class="field"><label for="agentPhone">Agent phone number</label><input id="agentPhone" name="agentPhone" maxlength="35" inputmode="tel" autocomplete="off" placeholder="0803 000 0000"></div><div class="field"><label for="advertiserName">Advertiser or seller name</label><input id="advertiserName" name="advertiserName" maxlength="100" placeholder="Name as advertised"></div></div>
           <div class="field"><label for="paymentName">Proposed payment recipient name</label><input id="paymentName" name="paymentName" maxlength="100" placeholder="Account holder named in instructions"></div>
           <div class="field"><label for="listingText">Relevant words from the advertisement (optional)</label><textarea id="listingText" name="listingText" maxlength="1800" rows="3" placeholder="Paste the advertised offer and payment instructions. Please remove personal or financial secrets."></textarea></div>
-          <p class="privacy-note"><span aria-hidden="true">♢</span> Raw addresses, phone numbers and full listing URLs are not kept in automated check history. Identifiers are compared as protected hashes. See <a href="/privacy.html">Privacy & limitations</a>.</p>
+          <p class="privacy-note"><span aria-hidden="true">♢</span> In this preliminary preview, details are not stored. After database activation, protected hashes can be used for cross-checks; no raw addresses, phone numbers or full listing links are stored in check history. See <a href="/privacy.html">Privacy & limitations</a>.</p>
           <label class="consent"><input id="aiExplain" type="checkbox" name="aiExplain" value="true"><span>Optional: ask AI to suggest three due-diligence questions. Only generic warning codes and property type are shared with OpenRouter—not your name, phone, address or listing text. This feature is off until configured by the operator.</span></label>
           <button id="checkSubmit" type="submit" class="btn primary stretch">Run my preliminary check <span aria-hidden="true">→</span></button><p id="checkError" class="form-message" role="alert" hidden></p>
         </div>
