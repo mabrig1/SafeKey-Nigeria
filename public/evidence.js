@@ -4,6 +4,8 @@
  * manually downloaded JSON file. Hashes prove byte-level consistency only,
  * never ownership, authenticity, identity or truth of an allegation.
  */
+import { hashLocalFile, MAX_LOCAL_FILE_BYTES } from "./evidence-core.js";
+
 (() => {
   const select = id => document.getElementById(id);
   const button = select("evidenceAdd"), fileField=select("evidenceFile"),
@@ -11,7 +13,7 @@
     info=select("evidenceNotice"), list=select("evidenceList"),
     exportButton=select("evidenceExport"), clearButton=select("evidenceClear");
   let records=[];
-  const MAX_SIZE=15*1024*1024, MAX_RECORDS=12;
+  const MAX_SIZE=MAX_LOCAL_FILE_BYTES, MAX_RECORDS=12;
   const element=(tag,cls,text)=>{
     const e=document.createElement(tag);
     if(cls)e.className=cls;
@@ -50,14 +52,12 @@
       message("Choose a non-empty file of 15 MB or less.",true);return;
     }
     if(records.length>=MAX_RECORDS){message("This session supports up to 12 files.",true);return}
-    if(!crypto?.subtle){message("Secure browser hashing is unavailable.",true);return}
     const label=noteField.value.trim();
     if(label.length>240){message("Keep the evidence note under 240 characters.",true);return}
     button.disabled=true;
     const previous=button.textContent;button.textContent="Hashing locally…";
     try{
-      const hash=await crypto.subtle.digest("SHA-256",await file.arrayBuffer());
-      const sha256=Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,"0")).join("");
+      const sha256=await hashLocalFile(file);
       if(records.some(r=>r.sha256===sha256)){
         message("This file's fingerprint is already in your local session.");return;
       }
