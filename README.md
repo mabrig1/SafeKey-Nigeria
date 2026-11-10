@@ -13,6 +13,12 @@
 - Optional OpenRouter AI questions (strict opt-in, generic warning codes only) and optional Resend private moderator email alerts (case reference only), both disabled by default.
 - Unit tests, restrictive CSP, no secrets in the browser, and no automatic public blacklist.
 
+## Benchmark-driven features
+
+- **Two-listing radar:** Compare two buyer-entered advertisements at `#compare` via `POST /api/compare`. It compares normalized Nigerian property references, amounts, contacts, and named payees. It never fetches a listing site, produces a fraud verdict, or stores listing content. Differing names and prices require questions, not accusations.
+- **Private evidence manifest:** At `#evidence`, use in-browser SHA-256 on files up to 15 MB and record short source notes. Download a portable JSON manifest when needed. **Files are never uploaded, hashes are not stored by SafeKey, and fingerprints never establish legal authenticity.**
+- **Independent GitHub benchmark:** See [GitHub comparison and license notes](docs/GITHUB_BENCHMARK_2026-11-10.md). No third-party source or media was copied.
+
 ## Stack
 Cloudflare Worker + D1 + plain HTML/CSS/JavaScript. Optional OpenRouter calls require a separately managed API key and can incur usage charges; no mobile build service or complex runtime dependencies. This is deliberate: avoid making unsupported verification claims and keep the first pilot inexpensive. The system is organized so authenticated registry integrations, document OCR and professional evidence workflows can be added as separate modules later.
 
@@ -42,6 +48,7 @@ Both integrations are **off by default**. OpenRouter receives only non-identifyi
 
 Without configured D1, only stateless `/api/check`, `/api/health` and an empty directory work. Private reporting and admin routes return `503` until configured. The preview never retains a case or makes external AI/email calls.
 
+- `POST /api/compare` (two user-supplied listings, no storage, D1-backed abuse limits when configured)
 - `GET /api/health`
 - `POST /api/check` (30 checks/hour/source, D1-backed)
 - `POST /api/reports` (4 reports/hour/source, disabled by default)

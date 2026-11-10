@@ -68,6 +68,27 @@ assert.equal(risk.aiAssist.status, "disabled");
 assert.match(risk.description, /not saved/i);
 assert.ok(risk.findings.some(item => item.code === "payment_name"));
 
+const compare=await (await verify("/api/compare", 200, post({
+  first:{area:"Lagos",address:"Fictional Estate 5",agentPhone:"08031234567",priceNgn:"12000000"},
+  second:{area:"Lagos",address:"Fictional Estate 5",agentPhone:"08061234567",priceNgn:"13000000"}
+}))).json();
+assert.equal(compare.status,"comparison_only");
+assert.equal(compare.possibleMatch,true);
+assert.equal(compare.retained,false);
+assert.ok(compare.signals.some(x=>x.code==="agent_contact_difference"));
+
+const compareBad=await (await verify("/api/compare",422,post({
+  first:{listingUrl:"javascript:alert(1)"},second:{address:"fictional estate"}
+}))).json();
+assert.match(compareBad.error,/HTTP or HTTPS/);
+
+const compareScript=await (await verify("/compare-ui.js",200)).text();
+assert.match(compareScript,/compareForm/);
+const evidenceScript=await (await verify("/evidence.js",200)).text();
+assert.match(evidenceScript,/SHA-256/);
+assert.match(homepage,/evidenceFile/);
+assert.match(homepage,/compareForm/);
+
 const invalid = await (await verify("/api/check", 422, post({
   kind: "land", address: ""
 }))).json();
