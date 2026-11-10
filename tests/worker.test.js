@@ -43,3 +43,46 @@ test("static assets get conservative security headers", async () => {
   assert.match(response.headers.get("content-security-policy"), /frame-ancestors 'none'/);
   assert.equal(response.headers.get("x-frame-options"), "DENY");
 });
+
+test("health detects missing D1 schema despite a binding and hash secret", async () => {
+  const env = {
+    HASH_PEPPER: "p".repeat(48),
+    DB: { prepare: () => ({
+      all: async () => ({ results: [{ name: "checks" }, { name: "reports" }] })
+    }) }
+  };
+  const response = await worker.fetch(new Request("https://safekey.test/api/health"), env);
+  assert.equal(response.status, 200);
+  const data = await response.json();
+  assert.equal(data.status, "migrations_required");
+  assert.equal(data.database, "migrations_required");
+  assert.equal(data.incidentReporting, false);
+});
+
+test("health confirms all four D1 tables, without claiming registry access", async () => {
+  const env = {
+    HASH_PEPPER: "p".repeat(48),
+    REPORTS_ENABLED: "true",
+    DB: { prepare: () => ({
+      all: async () => ({ results: ["checks", "reports", "professionals", "rate_buckets"].map(name => ({ name })) })
+    }) }
+  };
+  const response = await worker.fetch(new Request("https://safekey.test/api/health"), env);
+  const data = await response.json();
+  assert.equal(data.status, "configured");
+  assert.equal(data.database, "ready");
+  assert.equal(data.incidentReporting, true);
+  assert.equal(data.registryConnection, false);
+});
+
+test("health reports an inaccessible D1 schema, not false readiness", async () => {
+  const env = {
+    HASH_PEPPER: "p".repeat(48),
+    DB: { prepare: () => { throw new Error("no such table: checks"); } }
+  };
+  const response = await worker.fetch(new Request("https://safekey.test/api/health"), env);
+  const data = await response.json();
+  assert.equal(data.status, "database_unavailable");
+  assert.equal(data.database, "unavailable");
+  assert.equal(data.incidentReporting, false);
+});
