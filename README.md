@@ -10,14 +10,15 @@
 - Private, rate-limited incident reporting to a human moderation queue (off unless enabled).
 - Admin-only report review and a directory of manually verified professionals; directory starts empty.
 - Scheduled deletion of check history after 30 days and some closed/unreviewed reports after 180 days.
+- Optional OpenRouter AI questions (strict opt-in, generic warning codes only) and optional Resend private moderator email alerts (case reference only), both disabled by default.
 - Unit tests, restrictive CSP, no secrets in the browser, and no automatic public blacklist.
 
 ## Stack
-Cloudflare Worker + D1 + plain HTML/CSS/JavaScript. No paid AI API, mobile build service or complex runtime dependencies. This is deliberate: avoid making unsupported verification claims and keep the first pilot inexpensive. The system is organized so authenticated registry integrations, document OCR and professional evidence workflows can be added as separate modules later.
+Cloudflare Worker + D1 + plain HTML/CSS/JavaScript. Optional OpenRouter calls require a separately managed API key and can incur usage charges; no mobile build service or complex runtime dependencies. This is deliberate: avoid making unsupported verification claims and keep the first pilot inexpensive. The system is organized so authenticated registry integrations, document OCR and professional evidence workflows can be added as separate modules later.
 
 ## Local setup
 1. Install Node.js 20+ and run `npm install`.
-2. Copy `.dev.vars.example` to `.dev.vars`; replace both secrets with independent random strings of at least 32 characters. Keep this file out of Git.
+2. Copy `.dev.vars.example` to `.dev.vars`; replace the hash pepper and admin secret with separate random values of at least 32 characters. Put real API keys only in this ignored local file (not Git). Leave AI and email flags off until configured.
 3. Run `npm run db:local` to initialize the local D1 database.
 4. Run `npm run dev`; open the local URL Wrangler prints.
 5. Run `npm run check && npm test`. For now the admin credentials are entered manually in the browser each session (not stored by the client).
@@ -30,6 +31,12 @@ Cloudflare Worker + D1 + plain HTML/CSS/JavaScript. No paid AI API, mobile build
 5. To receive public complaints, first implement Cloudflare anti-abuse controls, privacy operations and moderator procedures; then set `REPORTS_ENABLED=true` in Worker environment. Default is disabled.
 6. Apply domain, access-control, WAF/rate-limit and incident-response settings before a public pilot. Run `npm run deploy` only when ready.
 7. Give the admin route additional Cloudflare Access protection before staff use. The built-in admin-key check is a pilot gate, not a complete staff identity solution.
+
+## Optional OpenRouter + Resend setup
+
+See [docs/OPENROUTER_RESEND_SETUP.md](docs/OPENROUTER_RESEND_SETUP.md) for the exact variable format, secure Cloudflare secret setup, verified sender requirements, privacy safeguards, test steps and rollout gates.
+
+Both integrations are **off by default**. OpenRouter receives only non-identifying warning codes after an explicit user opt-in. Resend sends only a reference number for new private reports; it never receives an allegation description. Neither service can be verified live without the user's privately installed credentials and the Cloudflare Worker environment.
 
 ## API
 - `GET /api/health`
