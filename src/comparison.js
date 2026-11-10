@@ -5,7 +5,7 @@ import { normalizeIdentity, normalizePhone, normalizeListingUrl, tidy } from "./
  * not copied from any third-party repository.
  *
  * All content is buyer-supplied. URLs are parsed, NEVER fetched. No records
- * or identifiers are persisted. No score, verification claim or fraud verdict.
+ * listing records are persisted. A D1-backed deployment may keep anonymous\n * rate-limit counts. No score, verification claim or fraud verdict.
  */
 const FIELDS = Object.freeze({
   area: 90, address: 220, plot: 100, listingUrl: 500,
