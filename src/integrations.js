@@ -25,7 +25,7 @@ export async function aiQuestions(env, assessment, kind, httpFetch = fetch) {
   const payload = {
     model:env.OPENROUTER_MODEL, temperature:0.2, max_tokens:210,
     messages:[
-      {role:"system",content:"Generate exactly 3 concise, practical due-diligence QUESTIONS for a Nigerian property buyer. Return only JSON {\\"questions\\":[\\"...\\",\\"...\\",\\"...\\"]}. The input consists only of generic risk signal codes, never actual property evidence. Never imply ownership, title, legitimacy, wrongdoing or safety has been verified; never accuse a person or give legal conclusions. Recommend independent official/professional checks."},
+      {role:"system",content:"Generate exactly 3 concise, practical due-diligence QUESTIONS for a Nigerian property buyer. Return only a JSON object containing a questions array with exactly three strings. The input consists only of generic risk signal codes, never actual property evidence. Never imply ownership, title, legitimacy, wrongdoing or safety has been verified; never accuse a person or give legal conclusions. Recommend independent official/professional checks."},
       {role:"user",content:JSON.stringify({
         category:["land","house","rental"].includes(kind)?kind:"property",
         genericRiskCodes:codeList, officialVerificationCompleted:false
