@@ -1,4 +1,5 @@
 import { parseCheck, evaluate, normalizeIdentity } from "./risk.js";
+import { aiQuestions, alertModerator, emailReady } from "./integrations.js";
 
 const headers = {
   "content-type": "application/json; charset=utf-8",
@@ -70,7 +71,7 @@ async function adminAuthorized(request, env) {
 }
 function adminReady(env) { return ready(env) && !!env.ADMIN_API_KEY && env.ADMIN_API_KEY.length >= 32; }
 function validShort(v, max, min = 1) { return typeof v === "string" && v.trim().length >= min && v.trim().length <= max; }
-async function handleApi(request, env) {
+async function handleApi(request, env, ctx) {
   const url = new URL(request.url), method = request.method, path = url.pathname;
   if (path === "/api/health" && method === "GET") return json({ service: "SafeKey Check", status: ready(env) ? "configured" : "setup_required", mode: "pilot", registryConnection: false });
   if (!ready(env)) return failure("Service not configured. Set the D1 database and HASH_PEPPER before checking properties.", 503);
@@ -97,10 +98,21 @@ async function handleApi(request, env) {
       listingOtherAgent = !!matching;
     }
     const assessment = evaluate(c, { propertyOtherAgent, listingOtherAgent });
+    let aiAssist;
+    if (input.aiExplain === true) {
+      if (env.AI_EXPLANATION_ENABLED !== "true") {
+        aiAssist = { status: "disabled", questions: [] };
+      } else if (!(await rateLimit(env, request, "ai", 8))) {
+        aiAssist = { status: "rate_limited", questions: [] };
+      } else {
+        try { aiAssist = await aiQuestions(env, assessment, c.kind); }
+        catch { aiAssist = { status: "unavailable", questions: [] }; }
+      }
+    }
     const id = crypto.randomUUID();
     await env.DB.prepare("INSERT INTO checks (id, property_key, agent_key, listing_key, risk_level, created_at) VALUES (?, ?, ?, ?, ?, ?)")
       .bind(id, propertyKey, agentKey, listingKey, assessment.level, new Date().toISOString()).run();
-    return json({ caseId: id, issuedAt: new Date().toISOString(), ...assessment });
+    return json({ caseId: id, issuedAt: new Date().toISOString(), ...assessment, ...(aiAssist ? { aiAssist } : {}) });
   }
 
   if (path === "/api/reports" && method === "POST") {
@@ -113,6 +125,12 @@ async function handleApi(request, env) {
     const id = crypto.randomUUID(), now = new Date().toISOString();
     await env.DB.prepare("INSERT INTO reports (id, category, area, description, evidence_kind, created_at) VALUES (?, ?, ?, ?, ?, ?)")
       .bind(id, b.category, b.area.trim(), b.description.trim(), b.evidenceKind, now).run();
+    if (emailReady(env)) {
+      const notification = alertModerator(env, id).catch(() => ({ status: "failed" }));
+      // A mail outage must not prevent saving an allegation for private review.
+      if (ctx?.waitUntil) ctx.waitUntil(notification);
+      else await notification;
+    }
     return json({ reference: id, status: "pending", message: "Submitted for private human review. This is not a police or regulator report." }, 201);
   }
 
@@ -169,13 +187,13 @@ function secureHeaders(response) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers: h });
 }
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const path = new URL(request.url).pathname;
     if (!path.startsWith("/api/")) {
       if (!env.ASSETS) return new Response("Static assets unavailable", { status: 503 });
       return secureHeaders(await env.ASSETS.fetch(request));
     }
-    try { return secureHeaders(await handleApi(request, env)); }
+    try { return secureHeaders(await handleApi(request, env, ctx)); }
     catch (error) {
       if (error && Number.isInteger(error.status) && error.status >= 400 && error.status < 500)
         return secureHeaders(failure(error.message, error.status));
