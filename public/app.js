@@ -88,6 +88,17 @@ function renderAssessment(report) {
   root.hidden = false; root.focus(); root.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 byId("year").textContent = String(new Date().getFullYear());
+api("/api/health").then(status => {
+  if (status.status === "stateless_preview") {
+    byId("previewNotice").hidden = false;
+    byId("reportSubmit").disabled = true;
+    byId("reportSubmit").textContent = "Reporting will open after verification setup";
+    notice(byId("reportMessage"), "Private incident reporting is not active in this preview. For urgent matters, contact appropriate authorities or independent legal assistance.");
+  }
+}).catch(() => {
+  byId("previewNotice").hidden = false;
+  byId("previewNotice").textContent = "Connection status is unknown. Do not rely on any on-screen assessment until the server is available.";
+});
 byId("checkForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   notice(byId("checkError"), "");
