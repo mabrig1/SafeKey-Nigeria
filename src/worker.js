@@ -73,10 +73,38 @@ function adminReady(env) { return ready(env) && !!env.ADMIN_API_KEY && env.ADMIN
 function validShort(v, max, min = 1) { return typeof v === "string" && v.trim().length >= min && v.trim().length <= max; }
 async function handleApi(request, env, ctx) {
   const url = new URL(request.url), method = request.method, path = url.pathname;
-  if (path === "/api/health" && method === "GET") return json({ service: "SafeKey Check", status: ready(env) ? "configured" : "setup_required", mode: "pilot", registryConnection: false });
-  if (!ready(env)) return failure("Service not configured. Set the D1 database and HASH_PEPPER before checking properties.", 503);
+  if (path === "/api/health" && method === "GET") return json({
+    service: "SafeKey Check",
+    status: ready(env) ? "configured" : "stateless_preview",
+    mode: ready(env) ? "pilot" : "no_storage",
+    registryConnection: false,
+    incidentReporting: ready(env) && env.REPORTS_ENABLED === "true",
+    aiAvailable: ready(env) && env.AI_EXPLANATION_ENABLED === "true"
+  });
   if (method !== "GET" && request.headers.get("origin") && request.headers.get("origin") !== url.origin)
     return failure("Cross-origin writes are not allowed.", 403);
+
+  // A fresh Cloudflare Worker can launch safely without a database. Stateless
+  // screening never stores submitted inputs or calls billable integrations.
+  // Allegation reporting, admin access and historical comparisons remain OFF.
+  if (!ready(env)) {
+    if (path === "/api/check" && method === "POST") {
+      const input = await readJson(request);
+      const parsed = parseCheck(input);
+      if (parsed.error) return failure(parsed.error, 422);
+      const assessment = evaluate(parsed.value);
+      return json({
+        caseId: "not-saved", issuedAt: new Date().toISOString(),
+        ...assessment,
+        description: assessment.description + " Stateless preview: this check was not saved and no past listings were compared.",
+        nextSteps: [...assessment.nextSteps, "This preview does not retain a report or check previous submissions."],
+        ...(input.aiExplain === true ? { aiAssist: { status: "disabled", questions: [] } } : {})
+      });
+    }
+    if (path === "/api/professionals" && method === "GET")
+      return json({ professionals: [], note: "The verified directory is not activated; no professionals are represented as credential-checked." });
+    return failure("This feature requires a configured SafeKey database and administrator controls.", 503);
+  }
 
   if (path === "/api/check" && method === "POST") {
     if (!(await rateLimit(env, request, "check", 30))) return failure("Check limit reached. Try again later.", 429);
