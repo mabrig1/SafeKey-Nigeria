@@ -1,23 +1,14 @@
 {
-  // Replace the D1 database_id with the real Cloudflare D1 ID before deployment.
+  // Safe first deployment: no fake D1 database ID.
+  // This Worker serves static assets and stateless checks until D1 is provisioned.
   "name": "safekey-nigeria",
   "main": "src/worker.js",
   "compatibility_date": "2025-12-01",
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
-    // Route all responses through the Worker so the CSP and other headers apply.
     "run_worker_first": true
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "safekey-nigeria",
-      "database_id": "00000000-0000-0000-0000-000000000000",
-      "migrations_dir": "migrations"
-    }
-  ],
-  "triggers": {
-    "crons": ["0 2 * * *"]
   }
+  // After creating the actual D1 database, add d1_databases as documented
+  // in docs/CLOUDFLARE_DEPLOYMENT.md and apply migrations.
 }
