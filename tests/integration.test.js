@@ -9,6 +9,11 @@ function fakeDb() {
     checks, reports, professionals,
     prepare(sql) {
       return {
+        async all() {
+          if (sql.includes("FROM reports ORDER BY")) return { results: reports };
+          if (sql.includes("FROM professionals WHERE active")) return { results: [] };
+          throw new Error("Unsupported mocked all query: " + sql);
+        },
         bind(...values) {
           return {
             async first() {
