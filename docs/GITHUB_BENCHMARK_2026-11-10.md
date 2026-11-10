@@ -19,7 +19,7 @@ Review date: 2026-11-10. Goal: borrow **product patterns and interaction ideas**
 - Uses Nigerian area/address/plot, link, phone, advertiser, payee and NGN price.
 - Compares payment recipient, contact number, price and property descriptions only after a *textual* location or plot-reference match.
 - Returns `status: comparison_only`, provenance text, clear caveats and next steps — never a fraud verdict, public accusation or safety score.
-- No upstream scraping, no ownership registry lookup, no database write. In configured D1 mode rate limits are applied.
+- No upstream scraping, no ownership registry lookup, and no stored listing/comparison data. In configured D1 mode, an anonymized rate-limit counter is written; no listing fields are retained.
 
 ### 2. Private evidence fingerprint kit
 - Hash selected local files using browser WebCrypto SHA-256, with a 15 MB per-file limit.
