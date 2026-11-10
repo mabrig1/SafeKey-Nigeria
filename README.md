@@ -21,7 +21,7 @@ Cloudflare Worker + D1 + plain HTML/CSS/JavaScript. Optional OpenRouter calls re
 2. Stateless screening works with no .dev.vars or database. For local D1-backed mode later, copy `.dev.vars.example` to `.dev.vars`; replace hash pepper and admin secret with separate random values of at least 32 characters. Put real API keys only in this ignored local file (not Git). Leave AI and email flags off until configured.
 3. Run `npm run dev` to launch the stateless preview. To activate D1, first add your real D1 binding to `wrangler.jsonc` per `docs/CLOUDFLARE_DEPLOYMENT.md`, then run `npm run db:local`.
 4. Open the local URL Wrangler prints and test a preliminary check. The preview does not store reports or contact any paid API.
-5. Run `npm run check && npm test`. For now the admin credentials are entered manually in the browser each session (not stored by the client).
+5. Run `npm run check && npm test`. GitHub Actions also runs local Wrangler smoke checks for the stateless and D1-backed modes (including migrations, report intake, admin authentication and moderation). This does not deploy the Worker. For now the admin credential is entered manually in the browser each session (not saved by the app).
 
 ## Cloudflare deployment — **stateless preview first; D1-backed pilot requires review**
 1. Default `wrangler.jsonc` can deploy the static site and stateless screening without D1. See [Cloudflare deployment recovery](docs/CLOUDFLARE_DEPLOYMENT.md). Create a real D1 database only when ready to activate persistence: `npx wrangler d1 create safekey-nigeria`.
@@ -47,6 +47,12 @@ Without configured D1, only stateless `/api/check`, `/api/health` and an empty d
 - `POST /api/reports` (4 reports/hour/source, disabled by default)
 - `GET /api/professionals`
 - `GET /api/admin/reports`, `POST /api/admin/reports/decision`, `POST /api/admin/professionals` (require `X-Admin-Key`)
+
+## Health and runtime verification
+
+`GET /api/health` reports one of: `stateless_preview` (no database, checks are not saved), `migrations_required` (binding exists but required tables are missing), `database_unavailable` (D1 cannot be inspected), or `configured` (all required table names are present). No health status means legal title or agent verification has occurred.
+
+CI runs `scripts/smoke.mjs` against a local stateless Worker, then creates a synthetic local D1 fixture and runs `scripts/smoke-db.mjs`. It tests actual Worker routing, asset/CSP headers, screening, database migration, duplicate signals, private incident workflow and authorization. Tests do not use Cloudflare production resources, live OpenRouter or Resend keys.
 
 ## Trust & privacy boundaries
 1. Nothing in an automated assessment means a person or title has been officially verified.
