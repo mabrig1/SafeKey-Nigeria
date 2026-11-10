@@ -31,3 +31,17 @@ jobs:
           worker_pid=$!
           trap 'kill "$worker_pid" 2>/dev/null || true; tail -n 75 /tmp/safekey-worker.log' EXIT
           node scripts/smoke.mjs
+      - name: Prepare and migrate synthetic LOCAL D1 database
+        env:
+          CI: "true"
+        run: |
+          node scripts/prepare-ci-d1.mjs
+          npx wrangler d1 migrations apply safekey-ci-test --local --config .wrangler.test.jsonc --persist-to .wrangler-ci
+      - name: Test real local D1-backed API flows (no remote database)
+        env:
+          CI: "true"
+        run: |
+          npx wrangler dev --local --ip 127.0.0.1 --port 8788 --inspector-port 0 --config .wrangler.test.jsonc --persist-to .wrangler-ci > /tmp/safekey-d1.log 2>&1 &
+          worker_pid=$!
+          trap 'kill "$worker_pid" 2>/dev/null || true; tail -n 75 /tmp/safekey-d1.log' EXIT
+          node scripts/smoke-db.mjs
