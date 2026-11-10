@@ -36,6 +36,7 @@ test("unrelated locations are not flagged as duplicate agents or price differenc
     first:base,second:{...base,
       area:"A different city",
       address:"No matching address",plot:"Different plot",
+      listingUrl:"https://other.example/unrelated/3",
       agentPhone:"08061234567",priceNgn:"10000000"}
   });
   assert.equal(result.possibleMatch,false);
