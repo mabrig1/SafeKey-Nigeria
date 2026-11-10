@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#113b42">
+  <meta name="description" content="SafeKey Nigeria helps property buyers and renters identify warning signs before payment. Evidence-led risk screening, not title verification.">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/styles.css">
+  <script defer src="/app.js"></script>
+  <title>SafeKey Nigeria — Check Before You Pay</title>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+  <div class="container nav">
+    <a href="#home" class="brand" aria-label="SafeKey Nigeria home"><span class="brand-icon" aria-hidden="true">⌂</span><span>safe<span class="brand-bold">key</span><small>NIGERIA</small></span></a>
+    <nav aria-label="Main navigation" class="navlinks">
+      <a href="#check">Check a property</a><a href="#how">How it works</a><a href="#report">Report a concern</a><a href="#professionals">Professionals</a>
+    </nav>
+    <a class="nav-cta" href="#check">Start a free check <span aria-hidden="true">↗</span></a>
+  </div>
+</header>
+<main id="main">
+<section class="hero" id="home">
+  <div class="container hero-layout">
+    <div class="hero-copy">
+      <div class="eyebrow"><span class="eyebrow-dot"></span> INDEPENDENT PROPERTY RISK SCREENING</div>
+      <h1>Your dream property deserves <em>a safer first step.</em></h1>
+      <p class="hero-lede">Before you send a deposit or sign an agreement, review the warning signs in a property listing, agent details and payment instructions. Know what still needs independent verification.</p>
+      <div class="hero-actions"><a href="#check" class="btn primary">Check before you pay <span aria-hidden="true">→</span></a><a href="#how" class="btn ghost">See how it works</a></div>
+      <div class="hero-trust"><span>✓ No account required for initial checks</span><span>✓ Clear evidence limitations</span><span>✓ Designed for Nigerian buyers & renters</span></div>
+    </div>
+    <div class="hero-visual" aria-label="Example risk report illustration">
+      <div class="floating-caption">BEFORE THE PAYMENT, ASK THE RIGHT QUESTIONS.</div>
+      <div class="preview-card">
+        <div class="preview-head"><div class="mock-logo">s<span>k</span></div><div><small>SAFEKEY CHECK</small><strong>Property review</strong></div><span class="mock-dots">•••</span></div>
+        <div class="preview-label">ILLUSTRATIVE ASSESSMENT</div>
+        <div class="mock-risk"><span class="pulse-mark">!</span><div><strong>Verification required</strong><small>This example is not a real property report.</small></div></div>
+        <div class="mock-row"><span class="mock-circle unknown">?</span><div><strong>Ownership & title</strong><small>Official search still needed</small></div><span class="pill-neutral">Not checked</span></div>
+        <div class="mock-row"><span class="mock-circle amber">!</span><div><strong>Payment beneficiary</strong><small>Check receiving-account authority</small></div><span class="pill-amber">Review</span></div>
+        <div class="mock-row"><span class="mock-circle unknown">?</span><div><strong>Agent's authority</strong><small>Confirm credentials independently</small></div><span class="pill-neutral">Not checked</span></div>
+        <div class="mock-footer"><span class="lock">♧</span> Evidence first. No false safety guarantees.</div>
+      </div>
+      <div class="hero-orbit one"></div><div class="hero-orbit two"></div>
+    </div>
+  </div>
+</section>
+<section class="proof-strip" aria-label="The SafeKey approach"><div class="container strip-grid"><div><span class="strip-num">01</span><div><strong>Screen warning signs</strong><small>Using information you provide</small></div></div><div><span class="strip-num">02</span><div><strong>See evidence gaps</strong><small>No invented registry verification</small></div></div><div><span class="strip-num">03</span><div><strong>Verify independently</strong><small>Before signing or paying</small></div></div></div></section>
+
+<section id="check" class="section check-section">
+  <div class="container">
+    <div class="section-intro centered"><span class="section-kicker">START HERE</span><h2>Make a more informed <em>property decision.</em></h2><p>Enter the details you have. SafeKey identifies potential inconsistencies and explains which critical checks remain unfinished.</p></div>
+    <div class="check-layout">
+      <form id="checkForm" class="panel form-panel" novalidate>
+        <div class="form-head"><div><h3>Property risk screening</h3><p>Free preliminary check · Around two minutes</p></div><span class="step-badge">STEP 1 OF 1</span></div>
+        <div class="form-content">
+          <div class="field"><label for="kind">What are you considering? <span class="req">*</span></label><select id="kind" name="kind" required><option value="land">Buying land</option><option value="house">Buying a house</option><option value="rental">Renting a home</option></select></div>
+          <div class="field-row"><div class="field"><label for="area">City or area</label><input id="area" name="area" maxlength="90" placeholder="e.g. Lekki, Lagos" autocomplete="off"></div><div class="field"><label for="plot">Plot or unit reference</label><input id="plot" name="plot" maxlength="100" placeholder="e.g. Block B, Plot 18"></div></div>
+          <div class="field"><label for="address">Property address or known landmark</label><input id="address" name="address" maxlength="220" placeholder="Street or estate name"></div>
+          <div class="field"><label for="listingUrl">Property listing link (optional)</label><input id="listingUrl" name="listingUrl" maxlength="500" type="url" inputmode="url" placeholder="https://example.com/property/..."><span class="field-hint">Links are analyzed as text only. SafeKey does not visit the website.</span></div>
+          <div class="field-row"><div class="field"><label for="agentPhone">Agent phone number</label><input id="agentPhone" name="agentPhone" maxlength="35" inputmode="tel" autocomplete="off" placeholder="0803 000 0000"></div><div class="field"><label for="advertiserName">Advertiser or seller name</label><input id="advertiserName" name="advertiserName" maxlength="100" placeholder="Name as advertised"></div></div>
+          <div class="field"><label for="paymentName">Proposed payment recipient name</label><input id="paymentName" name="paymentName" maxlength="100" placeholder="Account holder named in instructions"></div>
+          <div class="field"><label for="listingText">Relevant words from the advertisement (optional)</label><textarea id="listingText" name="listingText" maxlength="1800" rows="3" placeholder="Paste the advertised offer and payment instructions. Please remove personal or financial secrets."></textarea></div>
+          <p class="privacy-note"><span aria-hidden="true">♢</span> Raw addresses, phone numbers and full listing URLs are not kept in automated check history. Identifiers are compared as protected hashes. See <a href="/privacy.html">Privacy & limitations</a>.</p>
+          <button id="checkSubmit" type="submit" class="btn primary stretch">Run my preliminary check <span aria-hidden="true">→</span></button><p id="checkError" class="form-message" role="alert" hidden></p>
+        </div>
+      </form>
+      <aside class="check-aside">
+        <div class="aside-card dark-card"><div class="card-symbol">↗</div><h3>Small checks.<br><em>Better decisions.</em></h3><p>Some scams rely on urgency, mismatched identities or claims you cannot verify. Your first step is to slow the process down and collect evidence.</p></div>
+        <div class="aside-card steps-card"><h3>What this check can and cannot do</h3><ul class="checklist"><li><span>✓</span> Flag potentially concerning submitted details</li><li><span>✓</span> Compare anonymized identifiers from prior checks</li><li><span>✓</span> Recommend specific independent verification steps</li><li><span class="x-mark">×</span> Authenticate land titles or government records</li><li><span class="x-mark">×</span> Prove an agent or seller is fraudulent</li><li><span class="x-mark">×</span> Protect or hold your money</li></ul></div>
+        <div class="aside-small">SAFETY NOTICE <p>No warning signs does not mean a property is safe. A lawyer, surveyor and official record search may still be necessary.</p></div>
+      </aside>
+    </div>
+    <div id="checkResult" class="result-panel" tabindex="-1" aria-live="polite" hidden></div>
+  </div>
+</section>
+<section id="how" class="section how-section">
+ <div class="container"><div class="section-intro"><span class="section-kicker">OUR APPROACH</span><h2>Good decisions begin<br>with <em>better questions.</em></h2><p>Risk screening is only the beginning. Here's how SafeKey helps you organize your next steps.</p></div>
+ <div class="how-grid"><article class="how-card"><span class="how-num">01</span><div class="how-symbol">⌕</div><h3>Enter the clues</h3><p>Share a listing link, property reference, agent phone, or advertisement details. You control what you submit.</p></article><article class="how-card"><span class="how-num">02</span><div class="how-symbol">≋</div><h3>Examine the signals</h3><p>Simple, explainable rules highlight mismatched names, urgent payment requests and inconsistencies in previous submissions.</p></article><article class="how-card"><span class="how-num">03</span><div class="how-symbol">◇</div><h3>Understand the gaps</h3><p>Your report distinguishes allegations, user-supplied information and checks that have not yet been completed.</p></article><article class="how-card"><span class="how-num">04</span><div class="how-symbol">✓</div><h3>Verify before paying</h3><p>Use independent professionals and the appropriate official registers to confirm title, boundaries, authority and payment instructions.</p></article></div></div>
+</section>
+<section id="report" class="section report-section">
+ <div class="container report-grid">
+   <div class="report-story"><span class="section-kicker">COMMUNITY EVIDENCE</span><h2>Something doesn't <em>add up?</em></h2><p>Help document suspected property transaction problems for private human review. Submitting a concern does not mean the person or property is fraudulent.</p><div class="callout"><strong>Your report stays private.</strong><p>We do not automatically publish allegations or create public blacklists. This tool is not a substitute for filing with the police, a regulator or a lawyer.</p></div></div>
+   <form id="reportForm" class="panel report-form">
+     <h3>Submit a concern</h3><p class="muted">No files or sensitive documents are accepted in this early pilot.</p>
+     <div class="field"><label for="category">Concern category <span class="req">*</span></label><select id="category" name="category"><option value="advance_fee">Deposit or advance-fee concern</option><option value="misleading_listing">Potentially misleading listing</option><option value="possible_double_sale">Possible duplicate sale or allocation</option><option value="suspected_document_issue">Question about document consistency</option><option value="other">Other concern</option></select></div>
+     <div class="field"><label for="reportArea">General location <span class="req">*</span></label><input id="reportArea" name="area" maxlength="100" minlength="2" required placeholder="e.g. Ikeja, Lagos — no exact home address"></div>
+     <div class="field"><label for="evidenceKind">Evidence available</label><select id="evidenceKind" name="evidenceKind"><option value="none">No supporting record yet</option><option value="message">Message or correspondence</option><option value="receipt">Receipt or payment record</option><option value="photo">Photograph</option><option value="document">Legal or property document</option><option value="other">Other</option></select></div>
+     <div class="field"><label for="description">What happened? <span class="req">*</span></label><textarea id="description" name="description" minlength="30" maxlength="2000" rows="5" required placeholder="Describe the timeline, what was promised and what was inconsistent. Do not include bank account numbers, passwords, national IDs, or personal accusations you cannot substantiate."></textarea><span class="field-hint">30–2000 characters. Only authorized reviewers can access submissions.</span></div>
+     <label class="consent"><input id="reportConsent" type="checkbox" name="consent" required><span>I understand that my report is a private allegation for review, not a verified public warning, and I agree to the <a href="/privacy.html">pilot privacy terms</a>.</span></label>
+     <button class="btn primary stretch" id="reportSubmit" type="submit">Submit for review <span aria-hidden="true">→</span></button><p id="reportMessage" class="form-message" role="status" hidden></p>
+   </form>
+ </div>
+</section>
+<section id="professionals" class="section pros-section">
+ <div class="container">
+  <div class="pros-head"><div><span class="section-kicker">HUMAN EXPERTISE</span><h2>Some answers need <em>qualified people.</em></h2><p>The directory will show professionals only after manual evidence review. Always re-check their credentials yourself.</p></div><button class="btn outline" type="button" id="refreshPros">Refresh directory <span aria-hidden="true">↻</span></button></div>
+  <div id="professionalDirectory" class="directory" aria-live="polite"><p class="muted">Checking directory availability…</p></div>
+ </div>
+</section>
+<section class="section guidance-section">
+ <div class="container guidance-layout"><div><span class="section-kicker">BEFORE YOU PAY</span><h2>Your property safety <em>checklist.</em></h2><p>Save these questions before your next site visit or negotiation.</p></div><ol class="safety-list"><li>Who legally owns the property, and what official record supports that claim?</li><li>Can a licensed professional confirm the seller's authority and documents?</li><li>Do the site's physical location and survey boundaries match the advertisement?</li><li>Who will receive the payment, and how is that recipient authorized?</li><li>What independent evidence protects you if the deal fails?</li></ol></div>
+ </section>
+<section id="admin" class="section admin-section">
+ <div class="container"><details class="admin-details"><summary>Moderator workspace <span class="muted">(pilot administrators only)</span></summary>
+ <div class="admin-inner"><p>Access requires a server-configured administrator key. The key stays in this browser tab's memory only and is not saved by SafeKey.</p>
+ <div class="admin-access"><label for="adminKey">Administrator key</label><input type="password" id="adminKey" autocomplete="off" placeholder="Enter private admin key"><button id="loadReports" class="btn outline" type="button">Load private reports</button></div>
+ <p id="adminNotice" class="form-message" role="status" hidden></p><div id="adminReports"></div>
+ <form id="professionalForm" class="admin-professional"><h3>Add a manually vetted professional</h3><div class="field-row"><div class="field"><label for="proName">Name</label><input id="proName" name="name" maxlength="120" required></div><div class="field"><label for="proCity">City</label><input id="proCity" name="city" maxlength="80" required></div></div>
+ <div class="field-row"><div class="field"><label for="proProfession">Profession</label><select id="proProfession" name="profession"><option>Lawyer</option><option>Surveyor</option><option>Estate surveyor</option><option>Inspector</option></select></div><div class="field"><label for="proCredential">Credential description</label><input id="proCredential" name="credentialLabel" maxlength="120" required placeholder="Professional registration, verified manually"></div></div>
+ <div class="field"><label for="proEvidence">Public credential evidence (HTTPS)</label><input id="proEvidence" type="url" name="evidenceUrl" required maxlength="500" placeholder="https://official-register.example/..."></div>
+ <button type="submit" class="btn outline">Add to pilot directory</button></form>
+ </div></details></div>
+</section>
+</main>
+<footer class="footer"><div class="container footer-top"><div><a href="#home" class="brand footer-brand"><span class="brand-icon">⌂</span><span>safe<span class="brand-bold">key</span><small>NIGERIA</small></span></a><p>Built to encourage better questions before property payments. Independent pilot; not affiliated with a land registry or government agency.</p></div><div><strong>Explore</strong><a href="#check">Free preliminary check</a><a href="#report">Report a concern</a><a href="#professionals">Professional directory</a></div><div><strong>Important</strong><a href="/privacy.html">Privacy & limitations</a><a href="#how">How it works</a><a href="#admin">Moderator workspace</a></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> SafeKey Nigeria · Pilot</span><span>Risk screening is not legal verification. Verify independently before paying.</span></div></footer>
+</body>
+</html>
