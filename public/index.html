@@ -10,6 +10,7 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="stylesheet" href="/styles.css">
   <script defer src="/app.js"></script>
+  <script defer src="/verification-ui.js"></script>
   <script defer src="/compare-ui.js"></script>
   <script type="module" src="/evidence.js"></script>
   <script type="module" src="/workspace-ui.js"></script>
@@ -237,6 +238,30 @@
  <div class="field-row"><div class="field"><label for="proProfession">Profession</label><select id="proProfession" name="profession"><option>Lawyer</option><option>Surveyor</option><option>Estate surveyor</option><option>Inspector</option></select></div><div class="field"><label for="proCredential">Credential description</label><input id="proCredential" name="credentialLabel" maxlength="120" required placeholder="Professional registration, verified manually"></div></div>
  <div class="field"><label for="proEvidence">Public credential evidence (HTTPS)</label><input id="proEvidence" type="url" name="evidenceUrl" required maxlength="500" placeholder="https://official-register.example/..."></div>
  <button type="submit" class="btn outline">Add to pilot directory</button></form>
+ <section class="verification-admin" aria-label="Private professional review cases">
+   <h3>Private professional verification desk <span class="step-badge">OFF BY DEFAULT</span></h3>
+   <p class="muted">Coordinate a lawyer's, surveyor's or inspector's review without collecting client names, full property addresses, documents, or account details. A case does not certify ownership, validate a professional's credentials or authorize payment. Requires D1 migration 0002 and the private feature flag.</p>
+   <form id="verificationCaseForm" class="verification-create">
+     <div class="field-row">
+       <div class="field"><label for="verificationKind">Transaction type</label>
+         <select id="verificationKind"><option value="land">Land purchase</option><option value="house">House purchase</option><option value="rental">Rental</option></select></div>
+       <div class="field"><label for="verificationJurisdiction">Jurisdiction</label><select id="verificationJurisdiction"></select></div>
+     </div>
+     <div class="field">
+       <label for="verificationProfessional">Linked directory profile (optional)</label>
+       <select id="verificationProfessional"><option value="">Unassigned</option></select>
+       <span class="field-hint">A directory profile does not prove current professional registration.</span>
+       <button id="loadVerificationProfessionals" type="button" class="btn outline">Load profiles</button>
+     </div>
+     <button id="verificationCreate" type="submit" class="btn primary">Create private review case</button>
+   </form>
+   <div class="verification-case-toolbar">
+     <button id="loadVerificationCases" type="button" class="btn outline">Load private review cases</button>
+     <p id="verificationDeskNotice" class="form-message" role="status" hidden></p>
+   </div>
+   <div id="verificationCases" aria-live="polite"></div>
+   <div id="verificationCaseDetails" aria-live="polite"></div>
+ </section>
  </div></details></div>
 </section>
 </main>
