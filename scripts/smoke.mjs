@@ -56,6 +56,12 @@ assert.match(workspaceUI, /workspaceList/);
 assert.match(homepage, /id="workspaceForm"/);
 assert.match(homepage, /id="workspaceSources"/);
 
+const deskUi=await (await verify("/verification-ui.js",200)).text();
+assert.match(deskUi,/verificationCaseForm/);
+assert.match(homepage,/id="verificationCaseForm"/);
+assert.match(homepage,/id="verificationCases"/);
+await verify("/api/admin/verification-cases",503);
+
 const privacy = await (await verify("/privacy.html", 200)).text();
 assert.match(privacy, /stateless preview/i);
 assert.doesNotMatch(privacy, /\sstyle\s*=/i, "inline styles violate the current CSP");
