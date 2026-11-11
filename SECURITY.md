@@ -25,3 +25,10 @@ Automated checks are heuristic; no OCR, AI model inference, public fraudulent-pe
 - The browser's evidence SHA-256 kit never uploads files or fingerprints. It is capped at 15 MB per file, 12 entries per browser session, and uses no localStorage or server database. Downloaded JSON files can contain sensitive filenames, source labels, and free-text notes: users must protect them.
 - A hash only establishes whether bytes match; it says nothing about whether a deed, receipt or image is authentic or issued by an authorized body.
 - No third-party GitHub code was copied in this benchmark upgrade. See `docs/GITHUB_BENCHMARK_2026-11-10.md`.
+
+## Buyer due-diligence workspace
+
+- The checklist is session-memory only. No server writes, cookies created by the feature, localStorage or uploads. Closing or reloading the tab discards unsaved progress.
+- Downloaded JSON can contain sensitive notes. Imports use a strict versioned schema, known jurisdictions, known task IDs, allowed states, 240-character notes and a 64 KB file limit.
+- Checklist statuses are self-reported and cannot become a legal verification, ownership certification, or SafeKey authorization to pay.
+- Only maintained agency starting-point links are shown for Lagos, FCT and Enugu. Other jurisdictions get an explicit "not listed" message; no government database is queried.
