@@ -79,3 +79,26 @@
 @media(max-width:900px){.workspace-layout{grid-template-columns:1fr}}
 @media(max-width:560px){.workspace-step-head{flex-direction:column;gap:5px}.workspace-owner{text-align:left}}
 @media print{.workspace-section{display:none!important}}
+
+/* Private professional review desk: deliberately distinct from public verification UI. */
+.verification-admin{margin-top:30px;padding:22px;border:1px solid #c7e0d3;background:#f7fcf9;border-radius:12px}
+.verification-admin>h3{font-size:20px;margin-bottom:12px}
+.verification-admin>p{max-width:850px}
+.verification-create{max-width:850px;margin:22px 0}
+.verification-create .field{min-width:0}
+.verification-create .field .btn{margin-top:10px;min-height:38px}
+.verification-case-toolbar{display:flex;flex-direction:column;align-items:flex-start;gap:8px;margin:24px 0}
+.verification-case-row{padding:16px;border:1px solid var(--line);background:white;border-radius:9px;margin:11px 0;overflow-wrap:anywhere}
+.verification-case-row strong{display:block}
+.verification-case-row p{margin:6px 0 12px}
+#verificationCaseDetails{margin-top:25px}
+#verificationCaseDetails>h4{overflow-wrap:anywhere}
+.verification-task{padding:16px;border:1px solid #d4e4dc;border-radius:10px;background:white;margin:12px 0}
+.verification-task strong{font-size:13px}
+.verification-task p{font-size:11px;margin:7px 0}
+.verification-task-controls{display:flex;align-items:center;flex-wrap:wrap;gap:10px}
+.verification-task-controls select{max-width:300px;min-width:180px;min-height:45px;padding:9px;border:1px solid #d1e1d9;border-radius:8px}
+.verification-audit{background:#eff7f2;padding:15px;border:1px solid #cbded4;border-radius:9px;margin-top:22px}
+.verification-audit p{border-bottom:1px solid #dce8e1;padding:8px 0;overflow-wrap:anywhere}
+@media(max-width:560px){.verification-admin{padding:14px}.verification-task-controls select,.verification-task-controls button{width:100%;max-width:none}.verification-create .field-row{grid-template-columns:1fr}}
+@media print{.verification-admin{display:none!important}}

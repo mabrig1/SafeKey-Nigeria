@@ -17,7 +17,16 @@
 
 - **Two-listing radar:** Compare two buyer-entered advertisements at `#compare` via `POST /api/compare`. It compares normalized Nigerian property references, amounts, contacts, and named payees. It never fetches a listing site, produces a fraud verdict, or stores listing content. Differing names and prices require questions, not accusations.
 - **Private evidence manifest:** At `#evidence`, use in-browser SHA-256 on files up to 15 MB and record short source notes. Download a portable JSON manifest when needed. **Files are never uploaded, hashes are not stored by SafeKey, and fingerprints never establish legal authenticity.**
-- **Private due-diligence workspace:** At `#workspace`, select land, house or rental and the Nigerian jurisdiction, track required legal/survey/payment checks, find curated external agency websites for Lagos, FCT and Enugu, and save/restore a private local JSON checklist. Progress is **not verified by SafeKey**. See [the checklist guide](docs/DUE_DILIGENCE_WORKSPACE.md).\n- **Independent GitHub benchmark:** See [GitHub comparison and license notes](docs/GITHUB_BENCHMARK_2026-11-10.md). No third-party source or media was copied.
+- **Private due-diligence workspace:** At `#workspace`, select land, house or rental and the Nigerian jurisdiction, track required legal/survey/payment checks, find curated external agency websites for Lagos, FCT and Enugu, and save/restore a private local JSON checklist. Progress is **not verified by SafeKey**. See [the checklist guide](docs/DUE_DILIGENCE_WORKSPACE.md).
+- **Independent GitHub benchmark:** See [GitHub comparison and license notes](docs/GITHUB_BENCHMARK_2026-11-10.md). No third-party source or media was copied.
+
+## Private professional verification desk (NEW)
+
+- Private, **administrator-only** review cases for legal/survey/inspection checklists, with random case IDs, optional manual professional directory links, and append-only structured review events.
+- Summaries **never** certify ownership, practitioner credentials or payment safety. These are recorded administrative assertions, not official search results.
+- No client contact details, property addresses, report descriptions, identification documents or files are stored in the new tables.
+- Requires D1 migration 0002 and `VERIFICATION_DESK_ENABLED=true`; **OFF by default** until Cloudflare Access, staff identity, lawful process and retention controls are established.
+- See [private desk setup and activation requirements](docs/PROFESSIONAL_VERIFICATION_DESK.md).
 
 ## Stack
 Cloudflare Worker + D1 + plain HTML/CSS/JavaScript. Optional OpenRouter calls require a separately managed API key and can incur usage charges; no mobile build service or complex runtime dependencies. This is deliberate: avoid making unsupported verification claims and keep the first pilot inexpensive. The system is organized so authenticated registry integrations, document OCR and professional evidence workflows can be added as separate modules later.

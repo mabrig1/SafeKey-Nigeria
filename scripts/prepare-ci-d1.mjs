@@ -21,6 +21,7 @@ fs.writeFileSync(".dev.vars",[
   "REPORTS_ENABLED=true",
   "AI_EXPLANATION_ENABLED=false",
   "EMAIL_ALERTS_ENABLED=false",
+  "VERIFICATION_DESK_ENABLED=true",
   ""
 ].join("\n"),{mode:0o600});
 console.log("Created synthetic LOCAL D1 fixture. No credentials or production databases used.");
