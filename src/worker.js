@@ -1,6 +1,7 @@
 import { parseCheck, evaluate, normalizeIdentity } from "./risk.js";
 import { aiQuestions, alertModerator, emailReady } from "./integrations.js";
 import { compareListings } from "./comparison.js";
+import { handleVerificationRoutes } from "./verification-routes.js";
 
 const headers = {
   "content-type": "application/json; charset=utf-8",
@@ -207,6 +208,10 @@ async function handleApi(request, env, ctx) {
     if (!adminReady(env)) return failure("Admin access is not configured.", 503);
     if (!(await rateLimit(env, request, "admin", 80))) return failure("Admin request limit reached.", 429);
     if (!(await adminAuthorized(request, env))) return failure("Unauthorized.", 401);
+    if (path.startsWith("/api/admin/verification-cases")) {
+      // This code path is reachable only after DB, admin-key and rate-limit guards.
+      return handleVerificationRoutes(request, env, path, { json, failure, readJson });
+    }
     if (path === "/api/admin/reports" && method === "GET") {
       const list = await env.DB.prepare("SELECT id, category, area, description, evidence_kind, status, reviewer_note, created_at, reviewed_at FROM reports ORDER BY created_at DESC LIMIT 100").all();
       return json({ reports: list.results || [] });
@@ -273,5 +278,17 @@ export default {
       env.DB.prepare("DELETE FROM reports WHERE created_at < ? AND status IN ('pending', 'closed_unsubstantiated')").bind(staleReports),
       env.DB.prepare("DELETE FROM rate_buckets WHERE bucket < ?").bind(staleBuckets)
     ]);
+    // Case desk has its own 90-day maximum retention. Never delete or
+    // change immutable event contents individually; purge entire old cases.
+    // Without migration 0002, this optional cleanup is skipped safely.
+    const staleCases = new Date(Date.now() - 90 * 86400000).toISOString();
+    try {
+      await env.DB.batch([
+        env.DB.prepare("DELETE FROM verification_events WHERE case_id IN (SELECT id FROM verification_cases WHERE created_at < ?)").bind(staleCases),
+        env.DB.prepare("DELETE FROM verification_cases WHERE created_at < ?").bind(staleCases)
+      ]);
+    } catch {
+      console.warn("SafeKey verification desk cleanup unavailable; check migration and cron configuration.");
+    }
   }
 };
