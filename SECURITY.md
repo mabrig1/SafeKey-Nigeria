@@ -32,3 +32,10 @@ Automated checks are heuristic; no OCR, AI model inference, public fraudulent-pe
 - Downloaded JSON can contain sensitive notes. Imports use a strict versioned schema, known jurisdictions, known task IDs, allowed states, 240-character notes and a 64 KB file limit.
 - Checklist statuses are self-reported and cannot become a legal verification, ownership certification, or SafeKey authorization to pay.
 - Only maintained agency starting-point links are shown for Lagos, FCT and Enugu. Other jurisdictions get an explicit "not listed" message; no government database is queried.
+
+## Private professional review desk
+
+- `VERIFICATION_DESK_ENABLED` is `false` by default. The desk is behind existing admin authorization, but production must also enforce Cloudflare Access/SSO, MFA and per-staff audit before use.
+- Case tables store only random UUIDs, property kind, general jurisdiction, optional directory reference and structured review status/evidence enums; never client contact, property address, attachments, payments or free text.
+- Review events are append-only; a database trigger blocks UPDATE. For correction, append a new event. Automatic 90-day case deletion requires a configured, functioning Worker cron; default stateless config has no cron.
+- `review_reported` is not proof of credential verification or authenticated land title. See `docs/PROFESSIONAL_VERIFICATION_DESK.md`.
