@@ -47,6 +47,15 @@ assert.match(script, /renderAssessment/);
 const css = await (await verify("/styles.css", 200)).text();
 assert.match(css, /privacy-content/);
 
+const workspaceModule = await (await verify("/workspace-core.js", 200)).text();
+assert.match(workspaceModule, /WORKSPACE_SCHEMA/);
+assert.match(workspaceModule, /safeToPay:false/);
+const workspaceUI = await (await verify("/workspace-ui.js", 200)).text();
+assert.match(workspaceUI, /workspaceImport/);
+assert.match(workspaceUI, /workspaceList/);
+assert.match(homepage, /id="workspaceForm"/);
+assert.match(homepage, /id="workspaceSources"/);
+
 const privacy = await (await verify("/privacy.html", 200)).text();
 assert.match(privacy, /stateless preview/i);
 assert.doesNotMatch(privacy, /\sstyle\s*=/i, "inline styles violate the current CSP");
