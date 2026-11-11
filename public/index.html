@@ -12,6 +12,7 @@
   <script defer src="/app.js"></script>
   <script defer src="/compare-ui.js"></script>
   <script type="module" src="/evidence.js"></script>
+  <script type="module" src="/workspace-ui.js"></script>
   <title>SafeKey Nigeria — Check Before You Pay</title>
 </head>
 <body>
@@ -20,7 +21,7 @@
   <div class="container nav">
     <a href="#home" class="brand" aria-label="SafeKey Nigeria home"><span class="brand-icon" aria-hidden="true">⌂</span><span>safe<span class="brand-bold">key</span><small>NIGERIA</small></span></a>
     <nav aria-label="Main navigation" class="navlinks">
-      <a href="#check">Check a property</a><a href="#compare">Compare listings</a><a href="#evidence">Evidence kit</a><a href="#report">Report a concern</a><a href="#professionals">Professionals</a>
+      <a href="#check">Check a property</a><a href="#compare">Compare listings</a><a href="#evidence">Evidence kit</a><a href="#workspace">Due diligence</a><a href="#report">Report a concern</a><a href="#professionals">Professionals</a>
     </nav>
     <a class="nav-cta" href="#check">Start a free check <span aria-hidden="true">↗</span></a>
   </div>
@@ -157,6 +158,53 @@
     </div>
   </div>
 </section>
+<section id="workspace" class="section workspace-section">
+  <div class="container">
+    <div class="section-intro">
+      <span class="section-kicker">DUE-DILIGENCE WORKSPACE</span>
+      <h2>Track every check. <em>Know what's still unresolved.</em></h2>
+      <p>Build a private, property-specific action plan before any payment. Record what you have requested and where an independent professional has reportedly reviewed evidence. All progress is self-reported and never means SafeKey has verified a transaction.</p>
+    </div>
+    <div class="workspace-layout">
+      <div>
+        <form id="workspaceForm" class="panel workspace-create-form">
+          <h3>Start a personal checklist</h3>
+          <div class="field">
+            <label for="workspaceKind">Property transaction</label>
+            <select id="workspaceKind" name="kind"></select>
+          </div>
+          <div class="field">
+            <label for="workspaceJurisdiction">State / jurisdiction</label>
+            <select id="workspaceJurisdiction" name="jurisdiction">
+            </select>
+          </div>
+          <button type="submit" class="btn primary stretch">Start a new checklist <span aria-hidden="true">→</span></button>
+        </form>
+        <div class="aside-card workspace-disclaimer">
+          <h3>Official verification starting points</h3>
+          <p class="muted">Agency links below are provided for navigation only and are not connected to SafeKey. Do not share passwords or documents with SafeKey for this feature.</p>
+          <div id="workspaceSources" aria-live="polite"></div>
+        </div>
+        <div class="aside-card workspace-disclaimer">
+          <h3>Protect your progress</h3>
+          <p class="muted">The checklist stays in this browser tab. It is not automatically saved, and it will disappear when you close or reload the page unless you download a copy.</p>
+          <button id="workspaceExport" type="button" class="btn outline stretch">Download my private checklist (.json)</button>
+          <div class="field workspace-import">
+            <label for="workspaceImport">Restore a previously downloaded checklist</label>
+            <input id="workspaceImport" type="file" accept=".json,application/json" aria-describedby="workspaceImportHelp">
+            <span id="workspaceImportHelp" class="field-hint">The file is read locally and never uploaded. Maximum 64 KB.</span>
+          </div>
+          <button id="workspaceReset" type="button" class="btn outline">Clear this tab's checklist</button>
+          <p id="workspaceNotice" class="form-message" role="status" hidden></p>
+        </div>
+      </div>
+      <div>
+        <div class="workspace-progress" role="status"><strong>Progress recorded by you</strong><p id="workspaceProgress" aria-live="polite"></p><span>This is NOT a SafeKey verification or clearance to pay.</span></div>
+        <div id="workspaceList" class="workspace-list" aria-label="Personal due-diligence tasks"></div>
+      </div>
+    </div>
+  </div>
+</section>
 <section id="report" class="section report-section">
  <div class="container report-grid">
    <div class="report-story"><span class="section-kicker">COMMUNITY EVIDENCE</span><h2>Something doesn't <em>add up?</em></h2><p>Help document suspected property transaction problems for private human review. Submitting a concern does not mean the person or property is fraudulent.</p><div class="callout"><strong>Your report stays private.</strong><p>We do not automatically publish allegations or create public blacklists. This tool is not a substitute for filing with the police, a regulator or a lawyer.</p></div></div>
@@ -192,6 +240,6 @@
  </div></details></div>
 </section>
 </main>
-<footer class="footer"><div class="container footer-top"><div><a href="#home" class="brand footer-brand"><span class="brand-icon">⌂</span><span>safe<span class="brand-bold">key</span><small>NIGERIA</small></span></a><p>Built to encourage better questions before property payments. Independent pilot; not affiliated with a land registry or government agency.</p></div><div><strong>Explore</strong><a href="#check">Free preliminary check</a><a href="#compare">Compare two listings</a><a href="#evidence">Private evidence kit</a><a href="#report">Report a concern</a><a href="#professionals">Professional directory</a></div><div><strong>Important</strong><a href="/privacy.html">Privacy & limitations</a><a href="#how">How it works</a><a href="#admin">Moderator workspace</a></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> SafeKey Nigeria · Pilot</span><span>Risk screening is not legal verification. Verify independently before paying.</span></div></footer>
+<footer class="footer"><div class="container footer-top"><div><a href="#home" class="brand footer-brand"><span class="brand-icon">⌂</span><span>safe<span class="brand-bold">key</span><small>NIGERIA</small></span></a><p>Built to encourage better questions before property payments. Independent pilot; not affiliated with a land registry or government agency.</p></div><div><strong>Explore</strong><a href="#check">Free preliminary check</a><a href="#compare">Compare two listings</a><a href="#evidence">Private evidence kit</a><a href="#workspace">Due diligence checklist</a><a href="#report">Report a concern</a><a href="#professionals">Professional directory</a></div><div><strong>Important</strong><a href="/privacy.html">Privacy & limitations</a><a href="#how">How it works</a><a href="#admin">Moderator workspace</a></div></div><div class="container footer-bottom"><span>© <span id="year">2026</span> SafeKey Nigeria · Pilot</span><span>Risk screening is not legal verification. Verify independently before paying.</span></div></footer>
 </body>
 </html>

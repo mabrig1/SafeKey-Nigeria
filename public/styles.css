@@ -48,3 +48,34 @@
 @media print{
   .compare-section,.evidence-section{display:none!important}
 }
+
+/* Buyer-managed due-diligence workspace: no stored session or implied certification. */
+.workspace-section{background:#f4f9f6}
+.workspace-layout{display:grid;grid-template-columns:minmax(260px,.73fr) minmax(0,1.27fr);gap:28px;align-items:start}
+.workspace-create-form{padding:25px;margin-bottom:20px}
+.workspace-create-form h3{font-size:18px;margin-bottom:20px}
+.workspace-disclaimer{background:#fff}
+.workspace-disclaimer h3{font-size:17px}
+.workspace-disclaimer>p{font-size:13px}
+.workspace-progress{background:var(--navy);border-radius:13px;color:#fff;padding:22px 25px;margin-bottom:18px}
+.workspace-progress strong{display:block;font-size:16px}
+.workspace-progress p{color:#ddf0e7;font-size:13px;margin:8px 0 3px}
+.workspace-progress span{font-size:11px;color:#afd1c7}
+.workspace-list{display:grid;gap:14px}
+.workspace-step{padding:23px;border:1px solid #d7e7dc;background:#fff;border-radius:12px}
+.workspace-step-head{display:flex;gap:14px;justify-content:space-between;align-items:start}
+.workspace-step h3{font-size:15px;line-height:1.4;letter-spacing:-.3px;margin:0}
+.workspace-owner{color:var(--teal);font-size:10px;font-weight:800;max-width:190px;text-align:right;line-height:1.4}
+.workspace-step>p{font-size:12px;color:#546d65;margin:11px 0}
+.workspace-step label{font-size:11px;font-weight:800;display:block;margin-top:15px;margin-bottom:6px}
+.workspace-select,.workspace-note{display:block;width:100%;border:1px solid #d1e1d9;border-radius:8px;background:#fff;padding:10px;color:var(--ink)}
+.workspace-note{resize:vertical}
+.workspace-select:focus,.workspace-note:focus{outline:3px solid #75caba;outline-offset:2px}
+.workspace-import{margin:18px 0}
+.workspace-import input{width:100%}
+.source-card{border-top:1px solid #e7efe9;padding:11px 0}
+.source-card a{font-size:12px;font-weight:800;color:var(--teal)}
+.source-card p{font-size:11px;margin:6px 0 0}
+@media(max-width:900px){.workspace-layout{grid-template-columns:1fr}}
+@media(max-width:560px){.workspace-step-head{flex-direction:column;gap:5px}.workspace-owner{text-align:left}}
+@media print{.workspace-section{display:none!important}}
