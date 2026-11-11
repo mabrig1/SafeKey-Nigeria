@@ -13,3 +13,6 @@ RESEND_API_KEY=replace-with-your-resend-api-key
 RESEND_FROM_EMAIL=notifications@your-verified-domain.example
 ALERT_RECIPIENT_EMAIL=moderator@example.com
 EMAIL_ALERTS_ENABLED=false
+
+# Operator-only D1 review cases. Keep false until D1 + Access/2FA + retention.
+VERIFICATION_DESK_ENABLED=false
