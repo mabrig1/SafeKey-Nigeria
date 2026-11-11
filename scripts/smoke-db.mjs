@@ -69,4 +69,58 @@ assert.equal((await decision.json()).updated,true);
 const pros=await fetch(base+"/api/professionals");
 assert.equal(pros.status,200);
 assert.deepEqual((await pros.json()).professionals,[]);
+
+// Private verification desk: disabled outside explicit configuration, but
+// enabled against this synthetic D1 fixture to exercise migration 0002.
+const unauthorizedDesk=await post("/api/admin/verification-cases",{
+  kind:"land",jurisdiction:"lagos"
+});
+assert.equal(unauthorizedDesk.status,401);
+const adminHeader={"X-Admin-Key":"b".repeat(48)};
+const newCaseResponse=await post("/api/admin/verification-cases",{
+  kind:"land",jurisdiction:"lagos"
+},adminHeader);
+assert.equal(newCaseResponse.status,201);
+const newCase=await newCaseResponse.json();
+assert.equal(newCase.verificationStatus,"not_verified");
+assert.match(newCase.id,/^[0-9a-f-]{36}$/i);
+
+const extraDetails=await post("/api/admin/verification-cases",{
+  kind:"land",jurisdiction:"lagos",clientPhone:"08031234567"
+},adminHeader);
+assert.equal(extraDetails.status,422);
+
+const eventResponse=await post("/api/admin/verification-cases/"+newCase.id+"/events",{
+  checkId:"title_search",status:"review_reported",evidenceKind:"registry_result_described"
+},adminHeader);
+assert.equal(eventResponse.status,201);
+assert.equal((await eventResponse.json()).verificationStatus,"not_verified");
+
+const rejectedVerified=await post("/api/admin/verification-cases/"+newCase.id+"/events",{
+  checkId:"title_search",status:"verified_title",evidenceKind:"registry_result_described"
+},adminHeader);
+assert.equal(rejectedVerified.status,422);
+const rejectedPrivateNote=await post("/api/admin/verification-cases/"+newCase.id+"/events",{
+  checkId:"title_search",status:"requested",evidenceKind:"none",note:"Sensitive details"
+},adminHeader);
+assert.equal(rejectedPrivateNote.status,422);
+const caseResponse=await fetch(base+"/api/admin/verification-cases/"+newCase.id,{
+  headers:adminHeader,signal:AbortSignal.timeout(8000)
+});
+assert.equal(caseResponse.status,200);
+const deskDetails=await caseResponse.json();
+assert.equal(deskDetails.summary.titleVerified,false);
+assert.equal(deskDetails.summary.authorizationToPay,false);
+assert.equal(deskDetails.summary.items.find(x=>x.id==="title_search").status,"review_reported");
+assert.equal(deskDetails.events.length,1);
+assert.equal(JSON.stringify(deskDetails).includes("Sensitive details"),false);
+const deniedDetail=await fetch(base+"/api/admin/verification-cases/"+newCase.id,{signal:AbortSignal.timeout(8000)});
+assert.equal(deniedDetail.status,401);
+
+const deskList=await fetch(base+"/api/admin/verification-cases",{headers:adminHeader,signal:AbortSignal.timeout(8000)});
+assert.equal(deskList.status,200);
+assert.ok((await deskList.json()).cases.some(x=>x.id===newCase.id));
+
+console.log("SafeKey D1 professional desk smoke: PASS (migration, private authorization, strict inputs, append-only reviews, never verified)");
+
 console.log("SafeKey D1 local smoke: PASS (migration, health, saved checks, duplicate signals, report moderation, admin auth)");
